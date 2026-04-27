@@ -1,10 +1,11 @@
-import React from 'react';
-
-const Index: React.FC = () => {
+import {Navbar}  from "@/components/main/Navbar";
+const Index = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <h1 className="text-4xl font-bold">Hello World</h1>
-    </div>
+    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <h1 className="sr-only">Chain Pilot — Autonomous chain Portfolio AI</h1>
+      <Navbar />
+      
+    </main>
   );
 };
 
