@@ -1,6 +1,8 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { AppKitProvider } from "@reown/appkit/react";
+import { AppProvider } from "@/components/app/AppContext";
 
 function NotFoundComponent() {
   return (
@@ -65,5 +67,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+
+  return <AppKitProvider projectId="b56e18d47c72ab683b10814fe9495694" networks={[]}>
+  <AppProvider>
+
+  <Outlet />
+  </AppProvider>
+  
+  </AppKitProvider>
 }

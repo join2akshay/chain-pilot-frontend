@@ -1,20 +1,21 @@
 import { Brain, Clock, Repeat, Trophy, Sparkles } from "lucide-react";
 
-const stats = [
-  { Icon: Trophy, label: "Win Rate", value: "67%", sub: "Last 90d · 142 trades" },
-  { Icon: Clock, label: "Avg Hold Time", value: "3.4d", sub: "Swing-leaning" },
-  { Icon: Repeat, label: "Trade Frequency", value: "14 / wk", sub: "Active operator" },
-  { Icon: Brain, label: "Profitability Score", value: "78", sub: "Top 18% in cohort" },
-];
 
-const behaviors = [
-  { name: "Swing Trader", weight: 62, active: true },
-  { name: "Whale Follower", weight: 24, active: false },
-  { name: "Long-Term Holder", weight: 10, active: false },
-  { name: "Degen", weight: 4, active: false },
-];
 
-export function WalletIntelligence() {
+export function WalletIntelligence({ walletIntelligence }: { walletIntelligence: any }) {
+  console.log("Wallet intelligence data in component:", walletIntelligence);
+  const behaviors = [
+    { name: "Swing Trader", weight: walletIntelligence?.behavior?.swingTrader, active: true },
+    { name: "Whale Follower", weight: walletIntelligence?.behavior?.whaleFollower, active: false },
+    { name: "Long-Term Holder", weight: walletIntelligence?.behavior?.longTermHolder, active: false },
+    { name: "Degen", weight: walletIntelligence?.behavior?.degen, active: false },
+  ];
+  const stats = [
+    { Icon: Trophy, label: "Win Rate", value: walletIntelligence?.profile?.winRate, sub: "Last 90d · 142 trades" },
+    { Icon: Clock, label: "Avg Hold Time", value: walletIntelligence?.profile?.avgHoldDays, sub: "Swing-leaning" },
+    { Icon: Repeat, label: "Trade Frequency", value: walletIntelligence?.profile?.tradesPerWeek, sub: "Active operator" },
+    { Icon: Brain, label: "Profitability Score", value: walletIntelligence?.profile?.profitabilityScore, sub: "Top 18% in cohort" },
+  ];
   return (
     <div className="glass-strong rounded-2xl p-6">
       <div className="flex items-center justify-between">
