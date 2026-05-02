@@ -4,10 +4,13 @@ import { Sparkles, ArrowRight } from "lucide-react";
 import { WalletModal } from "./web3/WalletModal";
 import { NetworkSelector } from "./web3/NetworkSelector";
 import { ConnectedAddress } from "./web3/ConnectedAddress";
+import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
+import { useDisconnect } from '@reown/appkit/react'
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const [connected, setConnected] = useState<string | null>(null);
+ const{isConnected,address}=useAppKitAccount()
+   const { disconnect } = useDisconnect()
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -28,10 +31,10 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           <div className="hidden md:block">
-            <NetworkSelector />
+            {/* <NetworkSelector /> */}
           </div>
-          {connected ? (
-            <ConnectedAddress address="0x7a3F…9c2B" onDisconnect={() => setConnected(null)} />
+          {isConnected ? (
+            <ConnectedAddress address={address} onDisconnect={() => disconnect()} />
           ) : (
             <button
               onClick={() => setOpen(true)}
@@ -40,12 +43,17 @@ export function Navbar() {
               Connect Wallet
             </button>
           )}
+          {
+            isConnected && 
+
           <Link
             to="/app"
             className="hidden md:inline-flex items-center gap-1 rounded-xl glass px-3 py-2 text-sm font-medium hover:bg-white/10"
           >
             Launch App <ArrowRight className="h-3.5 w-3.5" />
           </Link>
+
+          }
         </div>
       </div>
 

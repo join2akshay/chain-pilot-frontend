@@ -1,12 +1,64 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Wallet, Rocket } from "lucide-react";
 import { SakuraPetals } from "./SakuraPetals";
 import { WalletModal } from "./web3/WalletModal";
 import sakuraTree from "@/assets/sakura-tree.png";
+import { useAppKit, useAppKitAccount } from '@/components/providers/Web3Provider'
+import { createApiClient } from "@/lib/apiClient";
+const Ticker = (items:any) => {
+
+  const list = items.items;
+  return (
+    <div className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm">
+      <div className="flex animate-ticker whitespace-nowrap py-2.5 justify-center">
+        {list.map((t, i) => (
+          <span key={i} className="terminal-text text-xs text-muted-foreground mx-6 inline-flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-primary/60" />
+            {t}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export function Hero() {
-  const [open, setOpen] = useState(false);
+const [globalData,setGlobalData]=useState([])
+  const globalDataAPI=async()=>{
+
+    const res=await createApiClient().get("/wallet/global-market")
+    console.log("Global data:",res)
+    const data=res?.data?.data?.data
+   const items = [
+    `ETH ${data?.market_cap_percentage.eth.toFixed(2)}%`,
+    `BTC $${data?.market_cap_percentage.btc.toFixed(2)}%`,
+    `SOL $${data?.market_cap_percentage.sol.toFixed(2)}%`,
+    `USDT ${data?.market_cap_percentage.usdt.toFixed(2)}%`,
+    `USDC ${data?.market_cap_percentage.usdc.toFixed(2)}%`,
+    `BNB ${data?.market_cap_percentage.bnb.toFixed(2)}%`,
+    `TRX ${data?.market_cap_percentage.trx.toFixed(2)}%`,
+    `XRP ${data?.market_cap_percentage.xrp.toFixed(2)}%`,
+    "Copilot online",
+  ];
+setGlobalData(items)
+  }
+
+  const {open}=useAppKit()
+  const {isConnected,address}=useAppKitAccount()
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    globalDataAPI()
+    if(isConnected){
+      console.log("Connected with address:",address)
+    
+      // navigate({ to: "/app" })
+    
+    }
+  },[isConnected,address])
+
+  // const [open, setOpen] = useState(false);
   return (
     <section className="relative isolate overflow-hidden bg-hero pt-40 pb-32">
       {/* Sakura tree backdrop on left (decorative) */}
@@ -71,14 +123,22 @@ export function Hero() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <button
-            onClick={() => setOpen(true)}
+          
+      
+      
+          {
+            !isConnected 
+            ? 
+            <button
+            onClick={() => open()}
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-neon px-6 py-3 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.04] active:scale-[0.98]"
           >
-            <Wallet className="h-4 w-4" />
-            Connect Wallet
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </button>
+              <Wallet className="h-4 w-4" />
+              Connect Wallet
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </button>
+                :
+
           <Link
             to="/app"
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-sakura px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow-soft transition-transform hover:scale-[1.04] active:scale-[0.98] animate-pulse-glow"
@@ -87,6 +147,7 @@ export function Hero() {
            Launch App
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
+          }
         </div>
 
         {/* Floating preview chip */}
@@ -107,7 +168,13 @@ export function Hero() {
           </div>
         </div>
       </div>
-      <WalletModal open={open} onClose={() => setOpen(false)} onConnect={() => setOpen(false)} />
+       <div className="mt-16">
+        {
+          globalData.length > 0 && <Ticker items={globalData} />
+        }
+        
+      </div>
+      {/* <WalletModal open={open} onClose={() => setOpen(false)} onConnect={() => setOpen(false)} /> */}
     </section>
   );
 }
