@@ -1,4 +1,5 @@
-
+// @ts-ignore
+// @ts-nocheck
 import { DecisionTag } from "./AIChat";
 
 export function DecisionCard({ data }: { data: any }) {

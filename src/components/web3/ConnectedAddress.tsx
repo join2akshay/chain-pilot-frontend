@@ -1,6 +1,6 @@
 import { Copy, LogOut } from "lucide-react";
 
-export function ConnectedAddress({ address, onDisconnect }: { address: string; onDisconnect?: () => void }) {
+export function ConnectedAddress({ address, onDisconnect }: { address: string|undefined; onDisconnect?: () => void }) {
   return (
     <div className="inline-flex items-center gap-2 rounded-xl glass px-3 py-2 text-xs font-medium">
       <span className="grid h-5 w-5 place-items-center rounded-full bg-gradient-neon text-[10px] text-primary-foreground">●</span>

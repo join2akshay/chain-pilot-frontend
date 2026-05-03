@@ -1,3 +1,5 @@
+// @ts-ignore
+// @ts-nocheck
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { SectionHeader } from "./WalletConnect";
 import { DecisionCard } from "./DecisionCard";

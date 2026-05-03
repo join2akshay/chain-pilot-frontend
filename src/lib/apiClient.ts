@@ -79,7 +79,7 @@ const createApiClient = (config: ApiClientConfig = {}): AxiosInstance => {
           return new Promise((onSuccess, onFailed) => {
             failedQueue.push({ onSuccess, onFailed });
           })
-            .then((token: string) => {
+            .then((token: any) => {
               originalRequest.headers.Authorization = `Bearer ${token}`;
               return instance(originalRequest);
             })
