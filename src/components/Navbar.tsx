@@ -29,6 +29,8 @@ export function Navbar() {
         <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
           <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
           <Link to="/app" className="hover:text-foreground transition-colors">Dashboard</Link>
+          <Link to="/docs" className="hover:text-foreground transition-colors" activeProps={{ className: "text-foreground" }}>How It Works</Link>
+
           <a href="#features" className="hover:text-foreground transition-colors">Features</a>
         </nav>
         <div className="flex items-center gap-2">

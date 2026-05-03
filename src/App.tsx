@@ -10,6 +10,8 @@ import { Market } from '@/components/Market'
 import { Footer } from '@/components/Footer'
 import { AppShell } from '@/components/app/AppShell'
 import { projectId, networks, ethersAdapter } from '../config/walletconnect'
+import DocsPage from './routes/doc'
+import BlogPostPage from './routes/blog'
 
 // Landing page component
 function LandingPage() {
@@ -64,6 +66,9 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/app/*" element={<AppShell />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/docs" element={<DocsPage />} />
+            <Route path="/blog/:id" element={<BlogPostPage />} />
+
           </Routes>
         </AppProvider>
       </AppKitProvider>
