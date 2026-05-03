@@ -1,11 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Bot, ChevronRight, Mic, Send, Sparkles, User, Zap } from "lucide-react";
 import { useApp, type ChatMessage } from "./AppContext";
+import { createApiClient } from "@/lib/apiClient";
+import { useAppKitAccount } from "../providers/Web3Provider";
 
 const quickPrompts = ["What should I do?", "Analyze risk", "Best move now?"];
 
 export function CopilotPanel() {
-  const { chatOpen, toggleChat, messages, sendUserMessage, activeContext, walletAddress, unreadCount } = useApp();
+const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const {isConnected}=useAppKitAccount()
+  const [currentActions, setCurrentActions] = useState<string[] | null>(null);
+  const [currentStep, setCurrentStep] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  const { chatOpen, toggleChat, sendUserMessage, activeContext, walletAddress, unreadCount } = useApp();
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -13,11 +22,86 @@ export function CopilotPanel() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, chatOpen]);
 
+  useEffect(() => {
+    const handleAction = (event: any) => {
+      handleActionSelect(event.detail.action);
+    };
+    window.addEventListener("selectAction", handleAction);
+    return () => window.removeEventListener("selectAction", handleAction);
+  }, [messages, currentStep]);
+
   function handleSend() {
     if (!input.trim()) return;
-    sendUserMessage(input);
+    let temp= messages;
+    temp.push({ id: Date.now().toString(), role: "user", content: input, pending: false });
+    setMessages([...temp]);
+    sendMessage(input)
     setInput("");
   }
+
+  function handleActionSelect(action: string) {
+    let temp = messages;
+    temp.push({ id: Date.now().toString(), role: "user", content: action, pending: false });
+    setMessages([...temp]);
+    setCurrentActions(null);
+    setCurrentStep(null);
+    sendMessage(action);
+  }
+
+   const sendMessage = async(message: string) => {
+     try {
+      setIsLoading(true);
+      
+      // Add pending message
+      const pendingId = Date.now().toString();
+      let temp = messages;
+      temp.push({ 
+        id: pendingId, 
+        role: "ai", 
+        content: "Analyzing your request", 
+        pending: true
+      });
+      setMessages([...temp]);
+
+      const res = await createApiClient().post("/ai/agent", { message })
+      console.log("User wallet chat data:", res)
+      const aiReply = res?.data?.data?.reply;
+      const actions = res?.data?.data?.actions || null;
+      const step = res?.data?.data?.step || null;
+
+      // Replace pending message with actual response
+      temp = messages.filter(m => m.id !== pendingId);
+      temp.push({ 
+        id: pendingId, 
+        role: "ai", 
+        content: aiReply, 
+        pending: false,
+        actions: actions,
+        step: step
+      });
+      setMessages([...temp])
+      
+      if (actions && actions.length > 0) {
+        setCurrentActions(actions);
+        setCurrentStep(step);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      setIsLoading(false);
+      // Replace pending message with error
+      temp = messages.filter(m => m.pending !== true);
+      temp.push({ 
+        id: Date.now().toString(), 
+        role: "ai", 
+        content: "Sorry, I encountered an error. Please try again.", 
+        pending: false
+      });
+      setMessages([...temp]);
+    }
+  }
+
+
 
   return (
     <>
@@ -78,21 +162,33 @@ export function CopilotPanel() {
             <div ref={endRef} />
           </div>
 
-          {/* Quick prompts */}
+          {/* Quick prompts or Action buttons */}
           <div className="flex flex-wrap gap-2 px-4 pb-2">
-            {quickPrompts.map((q) => (
-              <button
-                key={q}
-                onClick={() => sendUserMessage(q)}
-                className="rounded-full glass px-3 py-1 text-[11px] text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
-              >
-                {q}
-              </button>
-            ))}
+            {currentActions ? (
+              currentActions.map((action) => (
+                <button
+                  key={action}
+                  onClick={() => handleActionSelect(action)}
+                  className="flex-1 rounded-xl glass px-3 py-2 text-sm font-medium text-foreground transition hover:bg-gradient-neon hover:text-white hover:shadow-neon border border-white/10 hover:border-primary cursor-pointer text-center"
+                >
+                  {action}
+                </button>
+              ))
+            ) : (
+              quickPrompts.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => sendUserMessage(q)}
+                  className="rounded-full glass px-3 py-1 text-[11px] text-muted-foreground transition hover:bg-white/10 hover:text-white"
+                >
+                  {q}
+                </button>
+              ))
+            )}
           </div>
 
           {/* Input */}
-          <div className="border-t border-white/10 p-3">
+          <div className={`border-t border-white/10 p-3 ${currentActions ? "opacity-50 pointer-events-none" : ""}`}>
             <div className="flex items-center gap-2 rounded-2xl glass p-2">
               <button className="grid h-9 w-9 place-items-center rounded-xl hover:bg-white/10" aria-label="Voice input">
                 <Mic className="h-4 w-4 text-[color:var(--sakura)]" />
@@ -101,12 +197,14 @@ export function CopilotPanel() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Ask ChainPilot anything…"
-                className="flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-muted-foreground"
+                placeholder={currentActions ? "Select an option above..." : "Ask ChainPilot anything…"}
+                disabled={!!currentActions}
+                className="flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
               />
               <button
                 onClick={handleSend}
-                className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-105"
+                disabled={!!currentActions}
+                className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Send"
               >
                 <Send className="h-4 w-4" />
@@ -133,16 +231,36 @@ function Bubble({ msg }: { msg: ChatMessage }) {
       >
         {msg.pending ? (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">{msg.content}</span>
-            <span className="flex items-center gap-0.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-typing-dot" />
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0.15s" }} />
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-typing-dot" style={{ animationDelay: "0.3s" }} />
-            </span>
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-muted-foreground">{msg.content}</span>
+              <div className="flex items-center gap-1.5">
+                <div className="flex gap-1">
+                  <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                  <span className="h-2 w-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: "0.2s" }} />
+                  <span className="h-2 w-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: "0.4s" }} />
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
           <>
             <p className="leading-relaxed">{msg.content}</p>
+            {isAI && msg.actions && msg.actions.length > 0 && (
+              <div className="mt-3 flex flex-col gap-2">
+                {msg.actions.map((action) => (
+                  <button
+                    key={action}
+                    onClick={() => {
+                      const event = new CustomEvent("selectAction", { detail: { action, step: msg.step } });
+                      window.dispatchEvent(event);
+                    }}
+                    className="w-full rounded-lg bg-white/5 border border-white/20 px-3 py-2 text-xs font-medium text-foreground transition hover:bg-gradient-neon hover:text-white hover:border-primary hover:shadow-neon text-left cursor-pointer"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            )}
             {isAI && msg.decision && (
               <div className="mt-2.5 space-y-2">
                 <div className="flex items-center gap-2">

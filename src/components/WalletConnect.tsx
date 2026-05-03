@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Loader2, Wallet, Copy } from "lucide-react";
+import { useAppKitAccount } from "@reown/appkit/react";
+import { useNavigate } from "react-router";
 
 export function WalletConnect() {
   const [analyzing, setAnalyzing] = useState(false);
-  const address = "0x7a3F...9c2B";
+  const {address}=useAppKitAccount()
+  const navigate=useNavigate()
+  // const address = "0x7a3F...9c2B";
   const balance = "12.482 ETH";
 
   return (
@@ -31,11 +35,12 @@ export function WalletConnect() {
 
             <button
               onClick={() => {
-                setAnalyzing(true);
-                setTimeout(() => setAnalyzing(false), 2400);
+                // setAnalyzing(true);
+                // setTimeout(() => setAnalyzing(false), 2400);
+                navigate("/app")
               }}
               disabled={analyzing}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-neon px-5 py-3 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.03] disabled:opacity-80"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-neon px-5 py-3 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.03] disabled:opacity-80 cursor-pointer disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {analyzing ? (
                 <>

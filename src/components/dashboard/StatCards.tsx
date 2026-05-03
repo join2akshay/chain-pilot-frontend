@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, ShieldCheck, Heart } from "lucide-react";
+import { TrendingUp, ShieldCheck, Heart } from "lucide-react";
 import { useApp } from "../app/AppContext";
 import { useEffect } from "react";
 

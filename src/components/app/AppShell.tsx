@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { Link, useLocation, Routes, Route } from "react-router-dom";
 import {
   LayoutDashboard,
   Brain,
@@ -10,11 +10,18 @@ import {
   ChevronLeft,
   Menu,
 } from "lucide-react";
-import { AppProvider, useApp } from "./AppContext";
+import { useApp } from "./AppContext";
 import { CopilotPanel } from "./CopilotPanel";
 import { WalletModal } from "@/components/web3/WalletModal";
-import { NetworkSelector } from "@/components/web3/NetworkSelector";
 import { ConnectedAddress } from "@/components/web3/ConnectedAddress";
+
+// Import page components
+import Dashboard from "@/routes/app.index";
+import WalletPage from "@/routes/app.wallet";
+import RecommendationsPage from "@/routes/app.recommendations";
+import SignalsPage from "@/routes/app.signals";
+import SimulatorPage from "@/routes/app.simulator";
+import FeedPage from "@/routes/app.feed";
 
 type NavItem = {
   to: string;
@@ -33,18 +40,15 @@ const nav: NavItem[] = [
 ];
 
 export function AppShell() {
-  return (
-    <AppProvider>
-      <ShellInner />
-    </AppProvider>
-  );
+  return <ShellInner />;
 }
 
 function ShellInner() {
   const [collapsed, setCollapsed] = useState(false);
   const [walletModal, setWalletModal] = useState(false);
   const [tabSwitching, setTabSwitching] = useState(false);
-  const path = useRouterState({ select: (r) => r.location.pathname });
+  const location = useLocation();
+  const path = location.pathname;
   const { walletAddress, connectWallet, disconnectWallet, chatOpen, setActiveContext } = useApp();
 
   // Track active context for the AI
@@ -103,7 +107,7 @@ function ShellInner() {
             return (
               <Link
                 key={item.to}
-                to={item.to as never}
+                to={item.to}
                 className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                   Active
                     ? "bg-gradient-to-r from-primary/20 to-accent/10 text-foreground shadow-glow-soft"
@@ -173,7 +177,14 @@ function ShellInner() {
 
         <main className="flex-1 px-6 py-8">
           <div key={path} className="mx-auto max-w-6xl animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <Outlet />
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/wallet" element={<WalletPage />} />
+              <Route path="/recommendations" element={<RecommendationsPage />} />
+              <Route path="/signals" element={<SignalsPage />} />
+              <Route path="/simulator" element={<SimulatorPage />} />
+              <Route path="/feed" element={<FeedPage />} />
+            </Routes>
           </div>
         </main>
       </div>

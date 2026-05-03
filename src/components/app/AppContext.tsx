@@ -12,6 +12,8 @@ export type ChatMessage = {
   reasoning?: string;
   cta?: string;
   pending?: boolean;
+  actions?: string[];
+  step?: string;
 };
 
 type AppContextValue = {
@@ -65,7 +67,8 @@ const [userData,setUserData]=useState<any>(null)
 const [analysisData,setAnalysisData]=useState<any>(null)
 const [analyticsData,setAnalyticsData]=useState<any>(null)
 const [portfolioSummary,setPortfolioSummary]=useState<any>(null)
-const getUserData=async(address)=>{
+const getUserData=async(address:any)=>{
+  console.log({portfolioSummary})
   try {
     const res=await createApiClient().post("/wallet/connect",{"walletAddress":address})
     console.log("User data:",res)
@@ -73,14 +76,14 @@ const getUserData=async(address)=>{
   walletStorage.setAddress(address)
   walletStorage.setTokens(res?.data?.data?.tokens.accessToken,res?.data?.data?.tokens.refreshToken)
     setUserData(res?.data?.data)
-    getWalletAnalysis(address)
-    getWalletAnalytics(address)
-    getWalletSummary(address)
+    getWalletAnalysis()
+    getWalletAnalytics()
+    getWalletSummary()
   } catch (error) {
     console.error("Failed to fetch user data:", error);
   }
 }
-const getWalletAnalysis=async(address)=>{
+const getWalletAnalysis=async()=>{
   try {
     const res=await createApiClient().get("/wallet/analyze-wallet")
     console.log("User wallet analysis data:",res)
@@ -91,7 +94,7 @@ const getWalletAnalysis=async(address)=>{
     console.error("Failed to fetch user data:", error);
   }
 }
-const getWalletSummary=async(address)=>{
+const getWalletSummary=async()=>{
   try {
     const res=await createApiClient().get("/wallet/portfolio-summary")
     console.log("User wallet summary data:",res)
@@ -102,7 +105,7 @@ const getWalletSummary=async(address)=>{
     console.error("Failed to fetch user data:", error);
   }
 }
-const getWalletAnalytics=async(address)=>{
+const getWalletAnalytics=async()=>{
   try {
     const res=await createApiClient().get("/wallet/portfolio-analytics")
     console.log("User wallet analytics data====:",res)
@@ -149,7 +152,7 @@ const getWalletAnalytics=async(address)=>{
 
   useEffect(() => {
     console.log("AppContext: Checking wallet connection on mount...", isConnected, address);
-    if(isConnected){
+    if(isConnected && address){
       getUserData(address)
 
       // await getWalletAnalysis()
@@ -234,9 +237,11 @@ const getWalletAnalytics=async(address)=>{
       activeContext,
       setActiveContext,
       userData,
+      setUserData,
       analysisData,
+      setAnalysisData,
       analyticsData,
-
+      setAnalyticsData,
     }),
     [walletAddress, connectWallet, disconnectWallet, chatOpen, toggleChat, unreadCount, clearUnread, messages, sendUserMessage, activeContext, userData, analysisData, analyticsData],
   );
