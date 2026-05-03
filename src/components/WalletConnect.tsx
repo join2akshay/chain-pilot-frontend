@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 
 export function WalletConnect() {
   const [analyzing, setAnalyzing] = useState(false);
-  const {address}=useAppKitAccount()
+  const {address,isConnected}=useAppKitAccount()
   const navigate=useNavigate()
   // const address = "0x7a3F...9c2B";
   const balance = "12.482 ETH";
@@ -30,11 +30,13 @@ export function WalletConnect() {
                   <Copy className="h-3.5 w-3.5 cursor-pointer hover:text-foreground" />
                 </div>
                 <div className="font-mono text-xl font-semibold tracking-tight">{address}</div>
-                <div className="mt-1 text-sm text-muted-foreground">
+                {/* <div className="mt-1 text-sm text-muted-foreground">
                   Balance: <span className="font-medium text-foreground">{balance}</span>
-                </div>
+                </div> */}
               </div>
             </div>
+{
+  isConnected &&
 
             <button
               onClick={() => {
@@ -54,6 +56,7 @@ export function WalletConnect() {
                 <>Analyze My Wallet</>
               )}
             </button>
+}
           </div>
 
           {analyzing && (

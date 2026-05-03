@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, Routes, Route } from "react-router-dom";
+import { Link, useLocation, Routes, Route, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Brain,
@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { useApp } from "./AppContext";
 import { CopilotPanel } from "./CopilotPanel";
-import { WalletModal } from "@/components/web3/WalletModal";
 import { ConnectedAddress } from "@/components/web3/ConnectedAddress";
 
 // Import page components
@@ -25,6 +24,9 @@ import SimulatorPage from "@/routes/app.simulator";
 import FeedPage from "@/routes/app.feed";
  import SwapAdvisorPage from "@/routes/app.swap-advisor";
 import { Market } from "@/routes/Market";
+import { useAppKit, useAppKitAccount } from "../providers/Web3Provider";
+import { useDisconnect } from "@reown/appkit/react";
+import Logo from "@/assets/logo.png"
 
 type NavItem =
  {
@@ -53,12 +55,22 @@ export function AppShell() {
 
 function ShellInner() {
   const [collapsed, setCollapsed] = useState(false);
-  const [walletModal, setWalletModal] = useState(false);
   const [tabSwitching, setTabSwitching] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname;
-  const { walletAddress, connectWallet, disconnectWallet, chatOpen, setActiveContext } = useApp();
+  const { disconnect } = useDisconnect();
+  const { walletAddress, chatOpen, setActiveContext } = useApp();
+  const { open } = useAppKit();
+  const { isConnected } = useAppKitAccount();
 
+  // Protect app routes - redirect to home if not connected
+  useEffect(() => {
+    const isAppRoute = path.startsWith("/app");
+    if (isAppRoute && !isConnected) {
+      navigate("/", { replace: true });
+    }
+  }, [path, isConnected, navigate]);
   // Track active context for the AI
   useEffect(() => {
     const item = nav.find((n) => (n.exact ? path === n.to : path.startsWith(n.to)));
@@ -91,7 +103,9 @@ function ShellInner() {
         <div className="flex h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2 overflow-hidden">
             <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gradient-neon shadow-neon">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
+            <img src={Logo} alt="ChainPilot Logo" className="h-[2rem] w-[2rem] rounded-[24px] bg-[aliceblue]" />
+             
+              {/* <Sparkles className="h-4 w-4 text-primary-foreground" /> */}
             </div>
             {!collapsed && (
               <span className="text-base font-semibold tracking-tight">
@@ -112,15 +126,21 @@ function ShellInner() {
           {nav.map((item) => {
             const Active = isActive(item.to, item.exact);
             const Icon = item.icon;
+            const isAppRoute = item.to.startsWith("/app");
+            const isDisabled = isAppRoute && !isConnected;
             return (
               <Link
                 key={item.to}
-                to={item.to}
+                to={isDisabled ? "#" : item.to}
+                onClick={(e) => isDisabled && e.preventDefault()}
                 className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                  Active
+                  isDisabled
+                    ? "cursor-not-allowed opacity-50 text-muted-foreground"
+                    : Active
                     ? "bg-gradient-to-r from-primary/20 to-accent/10 text-foreground shadow-glow-soft"
                     : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                 }`}
+                title={isDisabled ? "Connect wallet to access" : ""}
               >
                 {Active && (
                   <span className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-r bg-gradient-neon shadow-neon" />
@@ -141,7 +161,7 @@ function ShellInner() {
               Pro tip
             </div>
             <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
-              Tap the pink orb to talk to your AI co-pilot at any time.
+              Tap the CP bottom orb to talk to your AI co-pilot at any time.
             </p>
           </div>
         )}
@@ -170,11 +190,11 @@ function ShellInner() {
             <div className="hidden md:block">
               {/* <NetworkSelector /> */}
             </div>
-            {walletAddress ? (
-              <ConnectedAddress address={walletAddress} onDisconnect={disconnectWallet} />
+            {isConnected ? (
+              <ConnectedAddress address={walletAddress} onDisconnect={disconnect} />
             ) : (
               <button
-                onClick={() => setWalletModal(true)}
+                onClick={() => open()}
                 className="rounded-xl bg-gradient-neon px-4 py-2 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.03]"
               >
                 Connect Wallet
@@ -200,14 +220,14 @@ function ShellInner() {
         </main>
       </div>
 
-      <WalletModal
+      {/* <WalletModal
         open={walletModal}
         onClose={() => setWalletModal(false)}
         onConnect={(name) => {
           connectWallet(name);
           setWalletModal(false);
         }}
-      />
+      /> */}
 
       <CopilotPanel />
     </div>

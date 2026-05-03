@@ -6,6 +6,7 @@ import { Bot, ChevronRight, Mic, Send, Sparkles, User, Zap } from "lucide-react"
 import { useApp, type ChatMessage } from "./AppContext";
 import { createApiClient } from "@/lib/apiClient";
 import { useAppKitAccount } from "../providers/Web3Provider";
+import Logo from "@/assets/logo.png"
 
 const quickPrompts = ["What should I do?", "Analyze risk", "Best move now?"];
 
@@ -121,7 +122,8 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
         aria-label={chatOpen ? "Collapse AI chat" : "Open AI chat"}
         className={`fixed bottom-15 right-6 z-50 grid h-14 w-14 place-items-center rounded-full bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-110 active:scale-95 animate-pulse-glow ${chatOpen ? "translate-x-0" : ""}`}
       >
-        {chatOpen ? <ChevronRight className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
+        {chatOpen ? <ChevronRight className="h-5 w-5" /> :             <img src={Logo} alt="ChainPilot Logo" className="h-[3.3rem] w-[3.3rem] rounded-[24px] bg-[aliceblue]" />
+}
         {!chatOpen && unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 grid h-5 min-w-5 place-items-center rounded-full bg-[color:var(--bearish)] px-1 text-[10px] font-bold text-white shadow-card">
             {unreadCount}

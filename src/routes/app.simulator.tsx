@@ -135,7 +135,10 @@ export default function SimulatorPage() {
               <div className="mt-2 text-2xl font-semibold text-[color:var(--bearish)]">-{drawdown.toFixed(1)}%</div>
               <div className="text-xs text-muted-foreground">P95 stress scenario</div>
             </div>
-            <button className="w-full rounded-xl bg-gradient-neon px-4 py-3 text-sm font-semibold text-primary-foreground shadow-neon transition-transform hover:scale-[1.02]">Apply Strategy</button>
+            <button className="relative w-full rounded-xl bg-gradient-neon px-4 py-3 text-sm font-semibold text-primary-foreground shadow-neon transition-transform hover:scale-[1.02] flex items-center justify-center gap-2">
+              Apply Strategy
+              <span className="inline-flex items-center rounded-full bg-black/40 px-2 py-0.5 text-[10px] font-semibold text-white">Coming Soon</span>
+            </button>
           </div>
         </div>
       </div>

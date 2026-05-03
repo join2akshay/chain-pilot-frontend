@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AppKitProvider } from '@reown/appkit/react'
+import { AppKitProvider, useAppKitAccount } from '@reown/appkit/react'
 import { AppProvider } from '@/components/app/AppContext'
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
@@ -13,13 +13,17 @@ import { projectId, networks, ethersAdapter } from '../config/walletconnect'
 
 // Landing page component
 function LandingPage() {
+  const{isConnected}=useAppKitAccount()
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
       <Navbar />
       <main>
         <Hero />
         <Features />
+        {
+          isConnected &&
         <WalletConnect />
+        }
         <AIChat />
         <Market />
       </main>

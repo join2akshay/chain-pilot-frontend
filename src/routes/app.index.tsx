@@ -1,6 +1,5 @@
 import { StatCards } from "@/components/dashboard/StatCards";
 import { PortfolioChart } from "@/components/dashboard/PortfolioChart";
-import { AllocationPie } from "@/components/dashboard/AllocationPie";
 import { TokenBalances } from "@/components/web3/TokenBalances";
 
 export default function AppDashboard() {
@@ -8,9 +7,9 @@ export default function AppDashboard() {
     <>
       <PageHeader eyebrow="Dashboard" title="Portfolio overview" subtitle="Live snapshot of your on-chain position." />
       <StatCards />
-      <section className="mt-6 grid gap-4 lg:grid-cols-3">
+      <section className="mt-6 grid gap-4 lg:grid-cols-2">
         <div className="lg:col-span-2"><PortfolioChart /></div>
-        <AllocationPie />
+        {/* <AllocationPie /> */}
       </section>
       <section className="mt-4 grid gap-4">
         <TokenBalances />

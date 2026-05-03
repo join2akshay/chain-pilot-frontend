@@ -40,7 +40,7 @@ export function Navbar() {
           ) : (
             <button
               onClick={() => open()}
-              className="rounded-xl bg-gradient-neon px-4 py-2 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.03] active:scale-[0.98]"
+              className="cursor-pointer rounded-xl bg-gradient-neon px-4 py-2 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.03] active:scale-[0.98]"
             >
               Connect Wallet
             </button>

@@ -54,10 +54,14 @@ export default function SwapAdvisorPage() {
   const [feedData, setFeedData] = useState<any>(null);
   const [portfolioData, setPortfolioData] = useState(defaultPortfolio);
 
+  useEffect(() => {
+    getWalletFeed();
+  }, [strategy]);
+
   const getWalletFeed = async () => {
     try {
       setIsLoading(true);
-      const res = await createApiClient().get("/swap-intelligence-pro");
+      const res = await createApiClient().get(`/swap-intelligence-pro?mode=${strategy.toLowerCase()}`);
       console.log("User wallet feed data:", res);
       setFeedData(res?.data?.data);
       
