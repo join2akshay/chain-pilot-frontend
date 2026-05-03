@@ -15,6 +15,7 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
   const [currentActions, setCurrentActions] = useState<string[] | null>(null);
   const [currentStep, setCurrentStep] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const hasInitialized = useRef(false);
 
 
   const { chatOpen, toggleChat, sendUserMessage, activeContext, walletAddress, unreadCount } = useApp();
@@ -105,11 +106,8 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
   }
 
   useEffect(() => {
-    console.log("Current actions:", isConnected);
-    if(isConnected){
-      let temp=messages
-    // temp.push({id:Date.now().toString(), role:"user", content:"Hello", pending:false})
-    // setMessages([...temp])
+    if(isConnected && !hasInitialized.current){
+      hasInitialized.current = true;
       sendMessage("Hello")
     }
   },[isConnected])

@@ -42,7 +42,7 @@ const nav: NavItem[] = [
   { to: "/app/simulator", label: "Portfolio Simulator", icon: FlaskConical },
   { to: "/app/feed", label: "Transaction Feed", icon: Activity },
   { to: "/app/swap-advisor", label: "AI Swap Advisor", icon: Wand2 },
-  { to: "/app/Market", label: "Live Insights", icon: Sparkles },
+  { to: "/app/Market", label: "Market Live Insights", icon: Sparkles },
 
   
 ];
