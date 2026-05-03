@@ -1,34 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { Recommendations } from "@/components/dashboard/Recommendations";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createApiClient } from "@/lib/apiClient";
 import { useApp } from "@/components/app/AppContext";
 
-export const Route = createFileRoute("/app/recommendations")({
-  head: () => ({
-    meta: [
-      { title: "AI Recommendations — ChainPilot" },
-      { name: "description", content: "AI-generated rebalancing and position-sizing recommendations." },
-    ],
-  }),
-  component: RecPage,
-});
-
-function RecPage() {
+export default function RecPage() {
   const {userData}=useApp()
-  const [loading, setLoading] = useState(false)
-   const [recommendationsData,setRecommendationsData]=useState(null)
     
-    const getWalletRecommendation=async(address)=>{
-      setLoading(true)
+    const getWalletRecommendation=async()=>{
       try {
         const res=await createApiClient().get("/wallet/recommendations")
         console.log("User wallet recommendations data:",res)
-        setRecommendationsData(res?.data?.data)
       } catch (error) {
         console.error("Failed to fetch user data:", error);
-      } finally {
-        setLoading(false)
       }
     }
     

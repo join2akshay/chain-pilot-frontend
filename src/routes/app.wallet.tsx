@@ -1,21 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { WalletIntelligence } from "@/components/dashboard/WalletIntelligence";
 import { RiskExposure } from "@/components/dashboard/RiskExposure";
 import { createApiClient } from "@/lib/apiClient";
 import { useApp } from "@/components/app/AppContext";
 import { useEffect, useState } from "react";
 
-export const Route = createFileRoute("/app/wallet")({
-  head: () => ({
-    meta: [
-      { title: "Wallet Intelligence — ChainPilot" },
-      { name: "description", content: "Trader DNA, behavior archetype and wallet analytics." },
-    ],
-  }),
-  component: WalletPage,
-});
-
-function WalletPage() {
+export default function WalletPage() {
 const {userData}=useApp();
   const [walletIntelligence, setWalletIntelligence] = useState<any>(null);
 

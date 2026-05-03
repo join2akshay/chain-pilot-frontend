@@ -1,36 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDown, ArrowUp, Activity, Flame, Snowflake, Waves } from "lucide-react";
+import { ArrowDown, Activity, Flame, Snowflake, Waves } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { smartMoney, whales, tokenFlows, sentiment } from "@/lib/mock-data";
 import { useEffect, useState } from "react";
 import { useApp } from "@/components/app/AppContext";
 import { createApiClient } from "@/lib/apiClient";
 
-export const Route = createFileRoute("/app/signals")({
-  head: () => ({
-    meta: [
-      { title: "Onchain Signals — ChainPilot" },
-      { name: "description", content: "Smart money, whales, exchange flows and live sentiment." },
-    ],
-  }),
-  component: SignalsPage,
-});
-
-function SignalsPage() {
+export default function SignalsPage() {
   const {userData}=useApp()
   const [chainSignalData,setChainSignalData]=useState(null)
-  const [loading, setLoading] = useState(false)
   
-  const getWalletSignals=async(address)=>{
-    setLoading(true)
+  const getWalletSignals=async()=>{
     try {
       const res=await createApiClient().get("/onchain/signals")
       console.log("User wallet signals data:",res)
       setChainSignalData(res?.data?.data)
     } catch (error) {
       console.error("Failed to fetch user data:", error);
-    } finally {
-      setLoading(false)
     }
   }
   
@@ -41,7 +25,7 @@ function SignalsPage() {
   }, [userData])
 
   // Transform flows object to array for chart
-  const flowsData = chainSignalData?.flows ? Object.entries(chainSignalData.flows).map(([token, data]) => ({
+  const flowsData = (chainSignalData as any)?.flows ? Object.entries((chainSignalData as any).flows).map(([token, data]: [string, any]) => ({
     token,
     inflow: data.inflow,
     outflow: data.outflow
@@ -65,7 +49,7 @@ function SignalsPage() {
             </span>
           </div>
           <ul className="mt-4 divide-y divide-white/5">
-            {chainSignalData?.movements?.map((s, i) => (
+            {(chainSignalData as any)?.movements?.map((s: any, i: number) => (
               <li key={i} className="flex items-center justify-between gap-3 py-3">
                 <div className="flex items-center gap-3">
                   <div className={`grid h-9 w-9 place-items-center rounded-xl bg-[color:var(--bullish)]/15`}>
@@ -87,18 +71,18 @@ function SignalsPage() {
         <div className="glass-strong rounded-2xl p-6">
           <div className="text-xs uppercase tracking-wider text-muted-foreground">Market Sentiment</div>
           <div className="mt-3 flex items-end justify-between">
-            <div className="text-4xl font-semibold tracking-tight">{chainSignalData?.sentiment?.score || 0}</div>
+            <div className="text-4xl font-semibold tracking-tight">{(chainSignalData as any)?.sentiment?.score || 0}</div>
             <span className="inline-flex items-center gap-1 rounded-md bg-[color:var(--sakura)]/15 px-2 py-1 text-xs font-semibold text-[color:var(--sakura)]">
-              <Flame className="h-3 w-3" /> {chainSignalData?.sentiment?.label || "Neutral"}
+              <Flame className="h-3 w-3" /> {(chainSignalData as any)?.sentiment?.label || "Neutral"}
             </span>
           </div>
           <div className="mt-2 text-xs text-muted-foreground">Fear & Greed Index</div>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-white/5">
-            <div className="h-full bg-gradient-to-r from-[color:var(--bearish)] via-[color:var(--sakura)] to-[color:var(--bullish)]" style={{ width: `${chainSignalData?.sentiment?.score || 0}%` }} />
+            <div className="h-full bg-gradient-to-r from-[color:var(--bearish)] via-[color:var(--sakura)] to-[color:var(--bullish)]" style={{ width: `${(chainSignalData as any)?.sentiment?.score || 0}%` }} />
           </div>
           <div className="mt-5 space-y-3">
-            <SentimentRow label="Social Buzz" value={chainSignalData?.sentiment?.socialBuzz || 0} Icon={Waves} />
-            <SentimentRow label="Funding Rates" value={chainSignalData?.sentiment?.fundingRates || 0} Icon={Snowflake} />
+            <SentimentRow label="Social Buzz" value={(chainSignalData as any)?.sentiment?.socialBuzz || 0} Icon={Waves} />
+            <SentimentRow label="Funding Rates" value={(chainSignalData as any)?.sentiment?.fundingRates || 0} Icon={Snowflake} />
           </div>
         </div>
       </div>
@@ -107,7 +91,7 @@ function SignalsPage() {
           <div className="text-xs uppercase tracking-wider text-muted-foreground">Whale Tracking</div>
           <h3 className="mt-1 text-lg font-semibold">Largest holders · 24h</h3>
           <ul className="mt-4 divide-y divide-white/5">
-            {chainSignalData?.whales?.map((w) => (
+            {(chainSignalData as any)?.whales?.map((w: any) => (
               <li key={w.wallet} className="flex items-center justify-between py-3">
                 <div>
                   <div className="text-sm font-semibold">{w.token}</div>

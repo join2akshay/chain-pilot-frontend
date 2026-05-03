@@ -1,23 +1,12 @@
 import { useMemo, useState, useEffect, useRef } from "react";
-import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles, TrendingUp, ShieldAlert } from "lucide-react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { createApiClient } from "@/lib/apiClient";
 
-export const Route = createFileRoute("/app/simulator")({
-  head: () => ({
-    meta: [
-      { title: "Portfolio Simulator — ChainPilot" },
-      { name: "description", content: "Simulate AI-optimized allocations across capital, risk and horizon." },
-    ],
-  }),
-  component: SimulatorPage,
-});
-
 const horizons = ["3m", "6m", "1y", "3y"] as const;
 const palette = ["oklch(0.72 0.27 350)", "oklch(0.85 0.18 340)", "oklch(0.75 0.20 160)", "oklch(0.70 0.22 30)", "oklch(0.65 0.22 290)"];
 
-function SimulatorPage() {
+export default function SimulatorPage() {
   const [capital, setCapital] = useState(50000);
   const [risk, setRisk] = useState(55);
   const [horizon, setHorizon] = useState<(typeof horizons)[number]>("1y");

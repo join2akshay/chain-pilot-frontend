@@ -1,17 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { TransactionFeed } from "@/components/dashboard/TransactionFeed";
 
-export const Route = createFileRoute("/app/feed")({
-  head: () => ({
-    meta: [
-      { title: "Transaction Feed — ChainPilot" },
-      { name: "description", content: "Timeline of AI decisions, trades and alerts." },
-    ],
-  }),
-  component: FeedPage,
-});
-
-function FeedPage() {
+export default function FeedPage() {
   return (
     <>
       <header className="mb-6">

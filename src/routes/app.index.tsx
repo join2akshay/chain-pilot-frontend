@@ -1,20 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { StatCards } from "@/components/dashboard/StatCards";
 import { PortfolioChart } from "@/components/dashboard/PortfolioChart";
 import { AllocationPie } from "@/components/dashboard/AllocationPie";
 import { TokenBalances } from "@/components/web3/TokenBalances";
 
-export const Route = createFileRoute("/app/")({
-  head: () => ({
-    meta: [
-      { title: "Dashboard — ChainPilot" },
-      { name: "description", content: "Portfolio value, PnL, risk and wallet health at a glance." },
-    ],
-  }),
-  component: AppDashboard,
-});
-
-function AppDashboard() {
+export default function AppDashboard() {
   return (
     <>
       <PageHeader eyebrow="Dashboard" title="Portfolio overview" subtitle="Live snapshot of your on-chain position." />
