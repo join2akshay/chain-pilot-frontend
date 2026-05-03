@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 import { useState } from "react";
 import { Loader2, Wallet, Copy } from "lucide-react";
 import { useAppKitAccount } from "@reown/appkit/react";

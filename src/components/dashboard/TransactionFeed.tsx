@@ -1,4 +1,4 @@
-import { Activity, Bot, Bell, Scale, ArrowDownUp, TrendingUp, TrendingDown } from "lucide-react";
+import { Activity, Bot, Bell, Scale, ArrowDownUp} from "lucide-react";
 import { createApiClient } from "@/lib/apiClient";
 import { useEffect, useState } from "react";
 import { useAppKitAccount } from "../providers/Web3Provider";
@@ -59,14 +59,18 @@ export function TransactionFeed() {
   const { isConnected } = useAppKitAccount();
 
   const [feedData, setFeedData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getWalletFeed = async () => {
     try {
+      setIsLoading(true);
       const res = await createApiClient().get("/timeline");
       console.log("User wallet feed data:", res);
       setFeedData(res?.data?.data);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,9 +93,24 @@ export function TransactionFeed() {
         </span>
       </div>
 
+      {isLoading ? (
+        <div className="mt-6 flex items-center justify-center min-h-[300px]">
+          <div className="flex flex-col items-center gap-4">
+            <div className="relative h-16 w-16">
+              <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-gradient-neon border-r-gradient-neon animate-spin" />
+              <div className="absolute inset-2 rounded-full border-2 border-transparent border-b-primary/50 animate-spin" style={{ animationDirection: "reverse", animationDuration: "1.5s" }} />
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-medium text-foreground">Loading activity feed</p>
+              <p className="text-xs text-muted-foreground mt-1">Fetching transaction data...</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
       <ul className="mt-6 relative">
         <div className="absolute left-3.5 top-2 bottom-2 w-px bg-gradient-to-b from-primary/60 via-accent/40 to-transparent" />
-        {feedData?.events?.map((event: any, i: number) => {
+        {feedData?.events?.map((event: any) => {
           const Icon = getIconForType(event.type);
           const tone = getToneForEvent(event);
           const timeStr = formatTime(event.timestamp);
@@ -119,6 +138,8 @@ export function TransactionFeed() {
           <div className="text-xs font-medium text-primary mb-1">Narrative</div>
           <p className="text-xs text-muted-foreground">{feedData.narrative}</p>
         </div>
+      )}
+      </>
       )}
     </div>
   );

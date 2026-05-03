@@ -1,4 +1,4 @@
-import { Zap } from "lucide-react";
+
 import { DecisionTag } from "./AIChat";
 
 export function DecisionCard({ data }: { data: any }) {

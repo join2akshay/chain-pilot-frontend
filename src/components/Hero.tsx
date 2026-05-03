@@ -8,10 +8,10 @@ import { createApiClient } from "@/lib/apiClient";
 const Ticker = ({ items }: { items: string[] }) => {
   const list = items;
   return (
-    <div className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm">
+    <div className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm mt-[7rem]">
       <div className="flex animate-ticker whitespace-nowrap py-2.5">
         {[...list, ...list].map((t: string, i: number) => (
-          <span key={i} className="terminal-text text-xs text-muted-foreground mx-6 inline-flex items-center gap-2 flex-shrink-0">
+          <span key={i} className="terminal-text text-md text-muted-foreground mx-6 inline-flex items-center gap-2 flex-shrink-0">
             <span className="h-1 w-1 rounded-full bg-primary/60" />
             {t}
           </span>

@@ -1,12 +1,12 @@
 
 import { Link } from "react-router-dom";
-import { Sparkles, ArrowRight } from "lucide-react";
+import {  ArrowRight } from "lucide-react";
 // import { WalletModal } from "./web3/WalletModal";
 // import { NetworkSelector } from "./web3/NetworkSelector";
 import { ConnectedAddress } from "./web3/ConnectedAddress";
 import {  useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { useDisconnect } from '@reown/appkit/react'
-import Logo from "@/assets/logo.jpeg"
+import Logo from "@/assets/logo.png"
 
 export function Navbar() {
   

@@ -24,6 +24,7 @@ import SignalsPage from "@/routes/app.signals";
 import SimulatorPage from "@/routes/app.simulator";
 import FeedPage from "@/routes/app.feed";
  import SwapAdvisorPage from "@/routes/app.swap-advisor";
+import { Market } from "@/routes/Market";
 
 type NavItem =
  {
@@ -41,6 +42,8 @@ const nav: NavItem[] = [
   { to: "/app/simulator", label: "Portfolio Simulator", icon: FlaskConical },
   { to: "/app/feed", label: "Transaction Feed", icon: Activity },
   { to: "/app/swap-advisor", label: "AI Swap Advisor", icon: Wand2 },
+  { to: "/app/Market", label: "Live Insights", icon: Sparkles },
+
   
 ];
 
@@ -190,6 +193,8 @@ function ShellInner() {
               <Route path="/simulator" element={<SimulatorPage />} />
               <Route path="/feed" element={<FeedPage />} />
               <Route path="/swap-advisor" element={<SwapAdvisorPage />} />
+              {/* <Route path="/swap-advisor" element={<SwapAdvisorPage />} /> */}
+              <Route path="/Market" element={<Market />} />
             </Routes>
           </div>
         </main>
