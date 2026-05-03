@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowRight, Wallet, Rocket } from "lucide-react";
 import { SakuraPetals } from "./SakuraPetals";
-import { WalletModal } from "./web3/WalletModal";
 import sakuraTree from "@/assets/sakura-tree.png";
 import { useAppKit, useAppKitAccount } from '@/components/providers/Web3Provider'
 import { createApiClient } from "@/lib/apiClient";
-const Ticker = (items:any) => {
-
-  const list = items.items;
+const Ticker = ({ items }: { items: string[] }) => {
+  const list = items;
   return (
     <div className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm">
-      <div className="flex animate-ticker whitespace-nowrap py-2.5 justify-center">
-        {list.map((t, i) => (
-          <span key={i} className="terminal-text text-xs text-muted-foreground mx-6 inline-flex items-center gap-2">
+      <div className="flex animate-ticker whitespace-nowrap py-2.5">
+        {[...list, ...list].map((t: string, i: number) => (
+          <span key={i} className="terminal-text text-xs text-muted-foreground mx-6 inline-flex items-center gap-2 flex-shrink-0">
             <span className="h-1 w-1 rounded-full bg-primary/60" />
             {t}
           </span>
@@ -24,32 +22,41 @@ const Ticker = (items:any) => {
 };
 
 export function Hero() {
-const [globalData,setGlobalData]=useState([])
+const [globalData,setGlobalData]=useState<string[]>([])
+const [recommendationsData,setRecommendationsData]=useState<any>(null)
+    
+    const getWalletRecommendation=async()=>{
+      try {
+        const res=await createApiClient().get("/market/hero-recommendation")
+        console.log("User wallet recommendations data:",res)
+        setRecommendationsData(res?.data?.data?.recommendation)
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    }
   const globalDataAPI=async()=>{
-
     const res=await createApiClient().get("/wallet/global-market")
-    console.log("Global data:",res)
-    const data=res?.data?.data?.data
-   const items = [
-    `ETH ${data?.market_cap_percentage.eth.toFixed(2)}%`,
-    `BTC $${data?.market_cap_percentage.btc.toFixed(2)}%`,
-    `SOL $${data?.market_cap_percentage.sol.toFixed(2)}%`,
-    `USDT ${data?.market_cap_percentage.usdt.toFixed(2)}%`,
-    `USDC ${data?.market_cap_percentage.usdc.toFixed(2)}%`,
-    `BNB ${data?.market_cap_percentage.bnb.toFixed(2)}%`,
-    `TRX ${data?.market_cap_percentage.trx.toFixed(2)}%`,
-    `XRP ${data?.market_cap_percentage.xrp.toFixed(2)}%`,
-    "Copilot online",
-  ];
-setGlobalData(items)
+    const data=res?.data?.data?.tokens
+    console.log("Global data:",data)
+    
+    const cryptoData = [
+     ...data
+    ];
+    
+    const items: string[] = cryptoData.map(crypto => 
+      `${crypto.symbol} $${crypto.price.toFixed(2)} ${crypto.change24h > 0 ? '+' : ''}${crypto.change24h.toFixed(2)}% ${crypto.trend === 'up' ? '📈' : '📉'}`
+    );
+    items.push("Copilot online");
+    
+    setGlobalData(items)
   }
 
-  const {open}=useAppKit()
-  const {isConnected,address}=useAppKitAccount()
-  const navigate = useNavigate()
+  const { open } = useAppKit();
+  const { isConnected, address } = useAppKitAccount();
 
-  useEffect(()=>{
+  useEffect(() => {
     globalDataAPI()
+    getWalletRecommendation()
     if(isConnected){
       console.log("Connected with address:",address)
     
@@ -118,7 +125,7 @@ setGlobalData(items)
         </h1>
 
         <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg text-muted-foreground">
-          Understand your wallet. Analyze the market. Make smarter trades — guided by an AI that
+          Understand your wallet. Analyze the market. Make smarter trades - guided by an AI that
           reads the chain so you don't have to.
         </p>
 
@@ -152,20 +159,23 @@ setGlobalData(items)
 
         {/* Floating preview chip */}
         <div className="mx-auto mt-16 max-w-3xl animate-float">
+        {
+          recommendationsData &&
           <div className="glass-strong rounded-2xl p-4 shadow-card">
             <div className="flex items-center justify-between gap-4 text-sm">
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-lg bg-gradient-sakura" />
                 <div className="text-left">
-                  <div className="font-medium">ETH · Recommendation</div>
-                  <div className="text-xs text-muted-foreground">Confidence 86% · RSI 42</div>
+                  <div className="font-medium">{recommendationsData?.token} · Recommendation</div>
+                  <div className="text-xs text-muted-foreground">Confidence {recommendationsData?.confidence}% · RSI {recommendationsData?.rsi}</div>
                 </div>
               </div>
               <span className="rounded-lg bg-bullish/15 px-3 py-1 text-xs font-semibold text-[color:var(--bullish)]">
-                BUY
+                {recommendationsData?.action}
               </span>
             </div>
           </div>
+        }
         </div>
       </div>
        <div className="mt-16">

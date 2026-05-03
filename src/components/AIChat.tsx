@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Bot, Send, User } from "lucide-react";
 import { SectionHeader } from "./WalletConnect";
 
@@ -72,6 +72,7 @@ export function AIChat() {
 
             <div className="mt-4 flex items-center gap-2 rounded-2xl glass p-2">
               <input
+              disabled
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
