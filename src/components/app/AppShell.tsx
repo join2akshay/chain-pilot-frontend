@@ -216,7 +216,7 @@ function ShellInner() {
               <Route path="/swap-advisor" element={<SwapAdvisorPage />} />
               {/* <Route path="/swap-advisor" element={<SwapAdvisorPage />} /> */}
               <Route path="/Market" element={<Market />} />
-              <Route path="/doc" element={DocsPage}/>
+              {/* <Route path="/doc" element={DocsPage}/> */}
             </Routes>
           </div>
         </main>
