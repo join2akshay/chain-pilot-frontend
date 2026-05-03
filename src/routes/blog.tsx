@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 // import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";

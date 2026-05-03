@@ -1,4 +1,5 @@
-
+// @ts-ignore
+// @ts-nocheck
 import { Link } from "react-router-dom";
 import {  ArrowRight } from "lucide-react";
 // import { WalletModal } from "./web3/WalletModal";

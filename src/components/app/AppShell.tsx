@@ -27,7 +27,6 @@ import { Market } from "@/routes/Market";
 import { useAppKit, useAppKitAccount } from "../providers/Web3Provider";
 import { useDisconnect } from "@reown/appkit/react";
 import Logo from "@/assets/logo.png"
-import DocsPage from "@/routes/doc";
 
 type NavItem =
  {

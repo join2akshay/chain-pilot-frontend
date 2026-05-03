@@ -7,11 +7,7 @@ import {
   ShieldAlert,
   Sparkles,
   CheckCircle2,
-  LineChart,
-  BarChart3,
-  Brain,
-  Gauge,
-  Database,
+  
   ArrowRight,
   Radio,
   Star,
@@ -70,28 +66,28 @@ const steps = [
   },
 ];
 
-const coreLogic = [
-  {
-    icon: LineChart,
-    title: "RSI Usage",
-    desc: "Relative Strength Index across multiple timeframes flags momentum extremes (oversold < 30, overbought > 70) and divergence patterns that precede reversals.",
-  },
-  {
-    icon: BarChart3,
-    title: "Volume Indicators",
-    desc: "Volume-weighted moving averages, OBV and abnormal volume spikes confirm whether a price move has real conviction behind it.",
-  },
-  {
-    icon: Brain,
-    title: "Wallet Behavior Tracking",
-    desc: "We classify wallets (degen, swing, holder, whale) and track cohort flows — when smart money rotates, you see it first.",
-  },
-  {
-    icon: Gauge,
-    title: "Confidence Scoring",
-    desc: "Signals are blended with weights tuned per regime. The output is a 0–100 confidence score, not a black-box yes/no.",
-  },
-];
+// const coreLogic = [
+//   {
+//     icon: LineChart,
+//     title: "RSI Usage",
+//     desc: "Relative Strength Index across multiple timeframes flags momentum extremes (oversold < 30, overbought > 70) and divergence patterns that precede reversals.",
+//   },
+//   {
+//     icon: BarChart3,
+//     title: "Volume Indicators",
+//     desc: "Volume-weighted moving averages, OBV and abnormal volume spikes confirm whether a price move has real conviction behind it.",
+//   },
+//   {
+//     icon: Brain,
+//     title: "Wallet Behavior Tracking",
+//     desc: "We classify wallets (degen, swing, holder, whale) and track cohort flows — when smart money rotates, you see it first.",
+//   },
+//   {
+//     icon: Gauge,
+//     title: "Confidence Scoring",
+//     desc: "Signals are blended with weights tuned per regime. The output is a 0–100 confidence score, not a black-box yes/no.",
+//   },
+// ];
 
 const coreFeatureBlogs = [
   { slug: "market-live-insight", title: "Market Live Insight", desc: "Live price, volume and macro pulse fused into one signal stream.", icon: Radio },
