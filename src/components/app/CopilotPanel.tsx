@@ -10,7 +10,7 @@ import { useAppKitAccount } from "../providers/Web3Provider";
 const quickPrompts = ["What should I do?", "Analyze risk", "Best move now?"];
 
 export function CopilotPanel() {
-const [messages, setMessages] = useState<ChatMessage[]>([]);
+const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString(), role:"user", content:"Hello", pending:false}]);
   const {isConnected}=useAppKitAccount()
   const [currentActions, setCurrentActions] = useState<string[] | null>(null);
   const [currentStep, setCurrentStep] = useState<string | null>(null);
@@ -104,6 +104,15 @@ const [messages, setMessages] = useState<ChatMessage[]>([]);
     }
   }
 
+  useEffect(() => {
+    console.log("Current actions:", isConnected);
+    if(isConnected){
+      let temp=messages
+    // temp.push({id:Date.now().toString(), role:"user", content:"Hello", pending:false})
+    // setMessages([...temp])
+      sendMessage("Hello")
+    }
+  },[isConnected])
 
 
   return (
@@ -112,7 +121,7 @@ const [messages, setMessages] = useState<ChatMessage[]>([]);
       <button
         onClick={toggleChat}
         aria-label={chatOpen ? "Collapse AI chat" : "Open AI chat"}
-        className={`fixed bottom-6 right-6 z-50 grid h-14 w-14 place-items-center rounded-full bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-110 active:scale-95 animate-pulse-glow ${chatOpen ? "translate-x-0" : ""}`}
+        className={`fixed bottom-15 right-6 z-50 grid h-14 w-14 place-items-center rounded-full bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-110 active:scale-95 animate-pulse-glow ${chatOpen ? "translate-x-0" : ""}`}
       >
         {chatOpen ? <ChevronRight className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
         {!chatOpen && unreadCount > 0 && (

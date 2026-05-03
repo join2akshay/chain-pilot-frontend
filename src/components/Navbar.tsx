@@ -18,7 +18,7 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between rounded-2xl glass px-5 py-3">
         <Link to="/" className="flex items-center gap-2">
-            <img src={Logo} alt="ChainPilot Logo" className="h-[3rem] w-[3rem] rounded-[24px]" />
+            <img src={Logo} alt="ChainPilot Logo" className="h-[3.25rem] w-[3.25rem] rounded-[24px] bg-[aliceblue]" />
           {/* <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-neon shadow-neon">
            
           </div> */}

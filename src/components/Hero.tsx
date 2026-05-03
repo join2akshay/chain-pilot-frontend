@@ -77,7 +77,7 @@ const [recommendationsData,setRecommendationsData]=useState<any>(null)
         <div className="absolute -left-24 top-1/4 h-[520px] w-[520px] rounded-full bg-primary/25 blur-[140px]" />
         {/* fog at base */}
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-primary/15 via-primary/5 to-transparent blur-2xl" />
-        <div className="absolute inset-0 animate-branch-sway">
+        <div className="absolute inset-0 animate-branch-sway left-[-6px]">
           <img
             src={sakuraTree}
             alt=""
