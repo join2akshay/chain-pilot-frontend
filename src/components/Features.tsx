@@ -5,7 +5,7 @@ const features = [
   {
     icon: Brain,
     title: "Wallet Intelligence",
-    body: "Behavioral DNA, win rate, hold time and trader archetype — derived directly from your on-chain history.",
+    body: "Behavioral DNA, win rate, hold time and trader archetype - derived directly from your on-chain history.",
   },
   {
     icon: Gauge,
@@ -20,7 +20,7 @@ const features = [
   {
     icon: Radio,
     title: "Onchain Signals",
-    body: "Smart money rotations, whale prints, exchange flows and sentiment — distilled into actionable cues.",
+    body: "Smart money rotations, whale prints, exchange flows and sentiment - distilled into actionable cues.",
   },
 ];
 

@@ -17,7 +17,7 @@ import { createApiClient } from "@/lib/apiClient";
 // export const Route = createFileRoute("/app/swap-advisor")({
 //   head: () => ({
 //     meta: [
-//       { title: "AI Swap Advisor — ChainPilot" },
+//       { title: "AI Swap Advisor - ChainPilot" },
 //       {
 //         name: "description",
 //         content:

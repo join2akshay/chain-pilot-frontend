@@ -17,11 +17,12 @@ import {
   PieChart,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAppKitAccount } from "@reown/appkit/react";
 
 // export const Route = createFileRoute("/docs")({
 //   head: () => ({
 //     meta: [
-//       { title: "How It Works — ChainPilot" },
+//       { title: "How It Works - ChainPilot" },
 //       {
 //         name: "description",
 //         content:
@@ -31,7 +32,7 @@ import { Link } from "react-router-dom";
 //       {
 //         property: "og:description",
 //         content:
-//           "Wallet analysis, market signals, risk scoring, AI recommendations and decentralized memory — explained.",
+//           "Wallet analysis, market signals, risk scoring, AI recommendations and decentralized memory - explained.",
 //       },
 //     ],
 //   }),
@@ -42,7 +43,7 @@ const steps = [
   {
     icon: Wallet,
     title: "Wallet Analysis",
-    desc: "We parse your on-chain history — holdings, PnL, hold time, win rate and behavior archetype.",
+    desc: "We parse your on-chain history - holdings, PnL, hold time, win rate and behavior archetype.",
   },
   {
     icon: Activity,
@@ -62,7 +63,7 @@ const steps = [
   {
     icon: CheckCircle2,
     title: "User Decision",
-    desc: "You stay in control — review, adjust, and execute. Every decision is remembered.",
+    desc: "You stay in control - review, adjust, and execute. Every decision is remembered.",
   },
 ];
 
@@ -80,7 +81,7 @@ const steps = [
 //   {
 //     icon: Brain,
 //     title: "Wallet Behavior Tracking",
-//     desc: "We classify wallets (degen, swing, holder, whale) and track cohort flows — when smart money rotates, you see it first.",
+//     desc: "We classify wallets (degen, swing, holder, whale) and track cohort flows - when smart money rotates, you see it first.",
 //   },
 //   {
 //     icon: Gauge,
@@ -94,13 +95,16 @@ const coreFeatureBlogs = [
   { slug: "hero-page-recommendation", title: "Hero Page Recommendation", desc: "Your highest-conviction next move, surfaced first.", icon: Star },
   { slug: "on-chain-signals", title: "On-chain Signals", desc: "Smart money, whales and exchange flows in real time.", icon: Network },
   { slug: "ai-recommendation", title: "AI Recommendation", desc: "BUY / SELL / HOLD with confidence and a real reason.", icon: Sparkles },
-  { slug: "wallet-intelligence", title: "Wallet Intelligence", desc: "Your on-chain profile — PnL, hold time, archetype.", icon: Wallet },
+  { slug: "wallet-intelligence", title: "Wallet Intelligence", desc: "Your on-chain profile - PnL, hold time, archetype.", icon: Wallet },
   { slug: "portfolio-simulator", title: "Portfolio Simulator", desc: "Stress-test allocations before you risk a dollar.", icon: PieChart },
   { slug: "chainpilot-ai-agent", title: "ChainPilot (AI Agent)", desc: "Always-on co-pilot watching your portfolio 24/7.", icon: Bot },
   { slug: "ai-swap-advisor", title: "AI Swap Advisor", desc: "AI-suggested rebalances with transparent reasoning.", icon: Wand2 },
 ];
 
 export default function DocsPage() {
+
+  const {isConnected}=useAppKitAccount()
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
       <Navbar />
@@ -118,7 +122,7 @@ export default function DocsPage() {
             <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">
               ChainPilot fuses your wallet history with live market intelligence
               and an AI reasoning layer to deliver transparent, on-chain trading
-              decisions — with you always in the driver's seat.
+              decisions - with you always in the driver's seat.
             </p>
           </div>
         </section>
@@ -129,7 +133,7 @@ export default function DocsPage() {
             The Flow
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
-            Five stages — from raw on-chain data to a decision you actually trust.
+            Five stages - from raw on-chain data to a decision you actually trust.
           </p>
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-5">
             {steps.map((s, i) => (
@@ -156,7 +160,7 @@ export default function DocsPage() {
             Core Logic
           </h2>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            What's actually under the hood — no buzzwords, just the signals we
+            What's actually under the hood - no buzzwords, just the signals we
             use and how they combine.
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
@@ -217,8 +221,8 @@ export default function DocsPage() {
               </h2>
             </div>
             <p className="mt-4 text-muted-foreground">
-              The simulator takes three inputs — capital, risk tolerance and
-              time horizon — and produces an optimized allocation with expected
+              The simulator takes three inputs - capital, risk tolerance and
+              time horizon - and produces an optimized allocation with expected
               return and drawdown bands.
             </p>
             <ol className="mt-6 grid gap-4 md:grid-cols-2">
@@ -256,20 +260,20 @@ export default function DocsPage() {
             <p className="mt-4 text-muted-foreground">
               Every recommendation, decision and outcome is hashed and pinned to
               <span className="text-foreground"> 0G decentralized storage</span>.
-              Your trading memory is portable, verifiable and uncensorable —
+              Your trading memory is portable, verifiable and uncensorable -
               the AI keeps learning from history nobody can rewrite.
             </p>
             <ul className="mt-6 grid gap-3 text-sm text-muted-foreground md:grid-cols-3">
               <li className="rounded-xl glass p-4">
-                <span className="text-foreground">Immutable</span> — decisions
+                <span className="text-foreground">Immutable</span> - decisions
                 are content-addressed, no silent edits.
               </li>
               <li className="rounded-xl glass p-4">
-                <span className="text-foreground">Portable</span> — your
+                <span className="text-foreground">Portable</span> - your
                 history follows your wallet across apps.
               </li>
               <li className="rounded-xl glass p-4">
-                <span className="text-foreground">Composable</span> — other
+                <span className="text-foreground">Composable</span> - other
                 agents can read and build on your track record.
               </li>
             </ul>
@@ -325,12 +329,15 @@ export default function DocsPage() {
           </div>
 
           <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+            {
+              isConnected &&
             <Link
               to="/app"
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-neon px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-neon transition-transform hover:scale-[1.03]"
             >
               Launch App <ArrowRight className="h-4 w-4" />
             </Link>
+            }
             {/* <Link
               to="/simulator"
               className="inline-flex items-center gap-2 rounded-xl glass px-5 py-2.5 text-sm font-medium hover:bg-white/10"

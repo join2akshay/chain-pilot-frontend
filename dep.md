@@ -1,4 +1,4 @@
-# 🚀 ChainPilot — Deployment Guide
+# 🚀 ChainPilot - Deployment Guide
 
 This guide walks you through deploying **ChainPilot** (a TanStack Start + Vite + React app) to **Netlify** or **Vercel**, step by step.
 
@@ -49,7 +49,7 @@ Common variables:
 
 ## 🌐 3. Deploy to Vercel
 
-### Option A — One-click via dashboard (recommended)
+### Option A - One-click via dashboard (recommended)
 
 1. Push your repo to GitHub.
 2. Go to [vercel.com/new](https://vercel.com/new).
@@ -62,7 +62,7 @@ Common variables:
 5. Add **Environment Variables** (Settings → Environment Variables) if needed.
 6. Click **Deploy**.
 
-### Option B — Vercel CLI
+### Option B - Vercel CLI
 
 ```bash
 npm i -g vercel
@@ -89,7 +89,7 @@ Your app is live at `https://<project>.vercel.app` 🎉
 
 ## 🟩 4. Deploy to Netlify
 
-### Option A — One-click via dashboard (recommended)
+### Option A - One-click via dashboard (recommended)
 
 1. Push your repo to GitHub.
 2. Go to [app.netlify.com/start](https://app.netlify.com/start).
@@ -100,7 +100,7 @@ Your app is live at `https://<project>.vercel.app` 🎉
 5. Add **Environment Variables** under *Site settings → Environment variables*.
 6. Click **Deploy site**.
 
-### Option B — Netlify CLI
+### Option B - Netlify CLI
 
 ```bash
 npm i -g netlify-cli

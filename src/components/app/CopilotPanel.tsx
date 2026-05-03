@@ -116,7 +116,7 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
 
   return (
     <>
-      {/* Floating toggle button — always visible */}
+      {/* Floating toggle button - always visible */}
       <button
         onClick={toggleChat}
         aria-label={chatOpen ? "Collapse AI chat" : "Open AI chat"}

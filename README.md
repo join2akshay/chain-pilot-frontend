@@ -1,17 +1,17 @@
-# ChainPilot — AI Co-Pilot for On-Chain Decisions
+# ChainPilot - AI Co-Pilot for On-Chain Decisions
 
-ChainPilot is a **Web3 + AI portfolio intelligence platform** that connects to your Ethereum wallet and gives you real-time on-chain signals, portfolio analytics, swap recommendations, and a conversational AI co-pilot — all in one dashboard.
+ChainPilot is a **Web3 + AI portfolio intelligence platform** that connects to your Ethereum wallet and gives you real-time on-chain signals, portfolio analytics, swap recommendations, and a conversational AI co-pilot - all in one dashboard.
 
 ---
 
 ## Features
 
 ### Landing Page
-- **Live Market Ticker** — Real-time global market data fetched from the backend
-- **Hero Recommendation** — AI-generated market call shown on first load
-- **Live Market Insights** — Streaming on-chain data in the Market section
-- **Demo AI Chat** — Preview of the Copilot experience (non-interactive demo)
-- **Wallet Connect CTA** — One-click wallet connection via Reown AppKit
+- **Live Market Ticker** - Real-time global market data fetched from the backend
+- **Hero Recommendation** - AI-generated market call shown on first load
+- **Live Market Insights** - Streaming on-chain data in the Market section
+- **Demo AI Chat** - Preview of the Copilot experience (non-interactive demo)
+- **Wallet Connect CTA** - One-click wallet connection via Reown AppKit
 
 ### Authenticated App (`/app`)
 
@@ -52,59 +52,59 @@ ChainPilot is a **Web3 + AI portfolio intelligence platform** that connects to y
 ## Project Structure
 
 - **`config/`**
-  - `walletconnect.ts` — Reown AppKit setup (networks, ethers adapter, project ID)
+  - `walletconnect.ts` - Reown AppKit setup (networks, ethers adapter, project ID)
 - **`src/`**
-  - `App.tsx` — Root component: providers + routing
-  - `main.tsx` — React entry point
-  - `styles.css` — Global Tailwind styles and custom theme
+  - `App.tsx` - Root component: providers + routing
+  - `main.tsx` - React entry point
+  - `styles.css` - Global Tailwind styles and custom theme
   - **`assets/`**
-    - `logo.png`, `logo.jpeg` — App logo assets
-    - `sakura-tree.png` — Landing page visual asset
+    - `logo.png`, `logo.jpeg` - App logo assets
+    - `sakura-tree.png` - Landing page visual asset
   - **`components/`**
     - **`app/`**
-      - `AppContext.tsx` — Global state: wallet data, AI messages, analytics
-      - `AppShell.tsx` — App layout: sidebar, navigation, nested routes
-      - `CopilotPanel.tsx` — Floating AI copilot side panel
+      - `AppContext.tsx` - Global state: wallet data, AI messages, analytics
+      - `AppShell.tsx` - App layout: sidebar, navigation, nested routes
+      - `CopilotPanel.tsx` - Floating AI copilot side panel
     - **`dashboard/`**
-      - `StatCards.tsx` — Portfolio summary stat cards
-      - `PortfolioChart.tsx` — Performance line chart (Recharts)
-      - `AllocationPie.tsx` — Token allocation pie chart
-      - `WalletIntelligence.tsx` — Wallet behavior analysis widget
-      - `RiskExposure.tsx` — Risk scoring widget
-      - `Recommendations.tsx` — AI recommendation cards
-      - `TransactionFeed.tsx` — On-chain transaction history list
+      - `StatCards.tsx` - Portfolio summary stat cards
+      - `PortfolioChart.tsx` - Performance line chart (Recharts)
+      - `AllocationPie.tsx` - Token allocation pie chart
+      - `WalletIntelligence.tsx` - Wallet behavior analysis widget
+      - `RiskExposure.tsx` - Risk scoring widget
+      - `Recommendations.tsx` - AI recommendation cards
+      - `TransactionFeed.tsx` - On-chain transaction history list
     - **`web3/`**
-      - `ConnectedAddress.tsx` — Displays the connected wallet address
-      - `TokenBalances.tsx` — Live token balance display
+      - `ConnectedAddress.tsx` - Displays the connected wallet address
+      - `TokenBalances.tsx` - Live token balance display
     - **`providers/`**
-      - `Web3Provider.tsx` — Initializes Reown AppKit, exports wallet hooks
-    - **`ui/`** — shadcn/Radix UI primitive components (Button, Card, Dialog, etc.)
-    - `Navbar.tsx` — Top navigation bar with wallet connect button
-    - `Hero.tsx` — Landing hero section with live market ticker
-    - `Features.tsx` — Landing page features section
-    - `Market.tsx` — Live market insights section
-    - `AIChat.tsx` — Demo AI chat UI on the landing page
-    - `WalletConnect.tsx` — Landing page wallet connect CTA
-    - `DecisionCard.tsx` — AI decision/suggestion display card
-    - `SakuraPetals.tsx` — Animated sakura background effect
-    - `Footer.tsx` — Site footer
+      - `Web3Provider.tsx` - Initializes Reown AppKit, exports wallet hooks
+    - **`ui/`** - shadcn/Radix UI primitive components (Button, Card, Dialog, etc.)
+    - `Navbar.tsx` - Top navigation bar with wallet connect button
+    - `Hero.tsx` - Landing hero section with live market ticker
+    - `Features.tsx` - Landing page features section
+    - `Market.tsx` - Live market insights section
+    - `AIChat.tsx` - Demo AI chat UI on the landing page
+    - `WalletConnect.tsx` - Landing page wallet connect CTA
+    - `DecisionCard.tsx` - AI decision/suggestion display card
+    - `SakuraPetals.tsx` - Animated sakura background effect
+    - `Footer.tsx` - Site footer
   - **`routes/`**
-    - `app.index.tsx` — `/app` Dashboard page
-    - `app.wallet.tsx` — `/app/wallet` Wallet Intelligence page
-    - `app.recommendations.tsx` — `/app/recommendations` AI Recommendations page
-    - `app.signals.tsx` — `/app/signals` On-Chain Signals page
-    - `app.simulator.tsx` — `/app/simulator` Portfolio Simulator page
-    - `app.feed.tsx` — `/app/feed` Transaction Feed page
-    - `app.swap-advisor.tsx` — `/app/swap-advisor` Swap Advisor page
+    - `app.index.tsx` - `/app` Dashboard page
+    - `app.wallet.tsx` - `/app/wallet` Wallet Intelligence page
+    - `app.recommendations.tsx` - `/app/recommendations` AI Recommendations page
+    - `app.signals.tsx` - `/app/signals` On-Chain Signals page
+    - `app.simulator.tsx` - `/app/simulator` Portfolio Simulator page
+    - `app.feed.tsx` - `/app/feed` Transaction Feed page
+    - `app.swap-advisor.tsx` - `/app/swap-advisor` Swap Advisor page
   - **`lib/`**
-    - `apiClient.ts` — Axios HTTP client with auth headers and token refresh logic
-    - `walletStorage.ts` — localStorage helpers for wallet address and auth tokens
-    - `utils.ts` — Shared utility functions
-- `.env.example` — Environment variable template
-- `vite.config.ts` — Vite build configuration
-- `tsconfig.json` — TypeScript config (`@/*` alias → `src/*`)
-- `components.json` — shadcn/ui configuration
-- `package.json` — Scripts and dependencies
+    - `apiClient.ts` - Axios HTTP client with auth headers and token refresh logic
+    - `walletStorage.ts` - localStorage helpers for wallet address and auth tokens
+    - `utils.ts` - Shared utility functions
+- `.env.example` - Environment variable template
+- `vite.config.ts` - Vite build configuration
+- `tsconfig.json` - TypeScript config (`@/*` alias → `src/*`)
+- `components.json` - shadcn/ui configuration
+- `package.json` - Scripts and dependencies
 ---
 
 ## Getting Started

@@ -44,11 +44,11 @@ type AppContextValue = {
 const AppCtx = createContext<AppContextValue | null>(null);
 
 const intros: Record<string, string> = {
-  Dashboard: "Your portfolio is slightly overexposed to SOL — beta has crept above your target. Want me to rebalance?",
-  "Wallet Intelligence": "I read your trading DNA — you're a Swing Trader with a 58% win rate. Hold time is shrinking, watch for FOMO entries.",
+  Dashboard: "Your portfolio is slightly overexposed to SOL - beta has crept above your target. Want me to rebalance?",
+  "Wallet Intelligence": "I read your trading DNA - you're a Swing Trader with a 58% win rate. Hold time is shrinking, watch for FOMO entries.",
   "AI Recommendations": "I'd reduce SOL exposure by 4–6% and rotate into stETH. It cuts drawdown risk by ~22% with minimal upside loss.",
-  "Onchain Signals": "Smart money is accumulating ARB. 4 wallets I track started buying in the last 90 minutes — confidence 88%.",
-  "Portfolio Simulator": "Tell me your capital and risk appetite — I'll run a Monte Carlo and propose an allocation.",
+  "Onchain Signals": "Smart money is accumulating ARB. 4 wallets I track started buying in the last 90 minutes - confidence 88%.",
+  "Portfolio Simulator": "Tell me your capital and risk appetite - I'll run a Monte Carlo and propose an allocation.",
   "Transaction Feed": "Here's your timeline. The ARB accumulation flag at 14m is the highest-conviction signal of the day.",
 };
 
@@ -201,7 +201,7 @@ const getWalletAnalytics=async()=>{
           decision === "BUY"
             ? "Smart money inflow rising, RSI 42 (neutral-bullish), funding flat. Risk fits your profile."
             : decision === "SELL"
-              ? "Distribution from top wallets, funding turning positive — momentum exhausted near resistance."
+              ? "Distribution from top wallets, funding turning positive - momentum exhausted near resistance."
               : "Volatility expanding, structure intact. Wait for a confirmation candle before adding size.";
         setMessages((m) =>
           m

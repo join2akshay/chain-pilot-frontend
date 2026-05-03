@@ -5,7 +5,7 @@ import { DecisionTag } from "./AIChat";
 const events = [
   { token: "ETH", action: "BUY" as const, qty: "1.20 ETH", outcome: "+4.2%", at: "2d ago", tx: "0x82a…1f4" },
   { token: "SOL", action: "SELL" as const, qty: "32 SOL", outcome: "+1.8%", at: "5d ago", tx: "0xc91…77b" },
-  { token: "ARB", action: "HOLD" as const, qty: "—", outcome: "neutral", at: "1w ago", tx: "0x4d7…2ac" },
+  { token: "ARB", action: "HOLD" as const, qty: "-", outcome: "neutral", at: "1w ago", tx: "0x4d7…2ac" },
   { token: "BTC", action: "BUY" as const, qty: "0.06 BTC", outcome: "+2.1%", at: "2w ago", tx: "0xa12…9e0" },
 ];
 
@@ -13,7 +13,7 @@ export function History() {
   return (
     <section id="history" className="relative px-6 py-24">
       <div className="mx-auto max-w-5xl">
-        <SectionHeader eyebrow="History" title="Memory of every call" subtitle="Every decision recorded — verifiable and inspectable." />
+        <SectionHeader eyebrow="History" title="Memory of every call" subtitle="Every decision recorded - verifiable and inspectable." />
         <div className="mt-3 inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
           <Link2 className="h-3.5 w-3.5 text-[color:var(--sakura)]" />
           Stored on-chain for transparency

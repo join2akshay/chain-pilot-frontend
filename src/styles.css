@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * ChainPilot — Sakura Neon Web3 Design System
+ * ChainPilot - Sakura Neon Web3 Design System
  * Dark-first, neon pink + soft sakura accents, glassmorphism, glow.
  */
 
@@ -121,7 +121,7 @@
 }
 
 .dark {
-  /* mirror :root — app is dark-only */
+  /* mirror :root - app is dark-only */
 }
 
 @layer base {

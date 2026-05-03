@@ -53,7 +53,7 @@ export function WalletModal({ open, onClose, onConnect }: { open: boolean; onClo
 
           <div className="mt-5 flex items-center gap-2 rounded-xl glass px-3 py-2 text-xs text-muted-foreground">
             <Shield className="h-3.5 w-3.5 text-[color:var(--sakura)]" />
-            We never see your keys — read-only signature.
+            We never see your keys - read-only signature.
           </div>
         </div>
       </div>

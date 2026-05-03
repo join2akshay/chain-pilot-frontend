@@ -80,7 +80,7 @@ export const recommendations = [
     action: "Rebalance",
   },
   {
-    title: "Position sizing — SOL",
+    title: "Position sizing - SOL",
     body: "SOL position is 1.8x your average sizing. Consider scaling out 25% on next +5% move.",
     confidence: 73,
     severity: "low" as const,
@@ -92,7 +92,7 @@ export const feedEvents = [
   { kind: "trade" as const, title: "Bought 0.42 ETH @ $3,481", meta: "Spot · Uniswap", time: "2m", tone: "bull" as const },
   { kind: "ai" as const, title: "AI flagged ARB accumulation by smart money", meta: "Signal · Confidence 88%", time: "14m", tone: "neutral" as const },
   { kind: "rebalance" as const, title: "Auto-rebalanced ETH/BTC 1.75 → 1.40", meta: "Strategy · Quarterly", time: "1h", tone: "neutral" as const },
-  { kind: "alert" as const, title: "Risk Score crossed 65 — review exposure", meta: "Alert · Threshold", time: "3h", tone: "bear" as const },
+  { kind: "alert" as const, title: "Risk Score crossed 65 - review exposure", meta: "Alert · Threshold", time: "3h", tone: "bear" as const },
   { kind: "trade" as const, title: "Sold 18 SOL @ $186.10", meta: "Spot · Jupiter", time: "5h", tone: "bull" as const },
   { kind: "ai" as const, title: "Fear & Greed flipped to Greed (68)", meta: "Sentiment · Daily", time: "8h", tone: "neutral" as const },
 ];
