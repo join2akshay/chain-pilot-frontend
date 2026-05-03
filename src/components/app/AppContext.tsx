@@ -14,6 +14,11 @@ export type ChatMessage = {
   pending?: boolean;
   actions?: string[];
   step?: string;
+  trade?: {
+    tokenIn: string;
+    tokenOut: string;
+    amountPercent: number;
+  };
 };
 
 type AppContextValue = {
@@ -70,7 +75,7 @@ const [portfolioSummary,setPortfolioSummary]=useState<any>(null)
 const getUserData=async(address:any)=>{
   console.log({portfolioSummary})
   try {
-    const res=await createApiClient().post("/wallet/connect",{"walletAddress":address})
+    const res=await createApiClient().post("/wallet/connect",{"walletAddress":'0xb83de012dba672c76a7dbbbf3e459cb59d7d6e36'})
     console.log("User data:",res)
     
   walletStorage.setAddress(address)

@@ -8,7 +8,7 @@ import { createApiClient } from "@/lib/apiClient";
 import { useAppKitAccount } from "../providers/Web3Provider";
 import Logo from "@/assets/logo.png"
 
-const quickPrompts = ["What should I do?", "Analyze risk", "Best move now?"];
+// const quickPrompts = ["What should I do?", "Analyze risk", "Best move now?"];
 
 export function CopilotPanel() {
 const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString(), role:"user", content:"Hello", pending:false}]);
@@ -16,6 +16,7 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
   const [currentActions, setCurrentActions] = useState<string[] | null>(null);
   const [currentStep, setCurrentStep] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [tradeComplete, setTradeComplete] = useState(false);
   const hasInitialized = useRef(false);
 
 
@@ -53,13 +54,13 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
     sendMessage(action);
   }
 
-   const sendMessage = async(message: string) => {
+   const sendMessage = async(message: string, initialMessages?: ChatMessage[]) => {
      try {
       setIsLoading(true);
       
       // Add pending message
       const pendingId = Date.now().toString();
-      let temp = messages;
+      let temp = initialMessages || messages;
       temp.push({ 
         id: pendingId, 
         role: "ai", 
@@ -73,20 +74,26 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
       const aiReply = res?.data?.data?.reply;
       const actions = res?.data?.data?.actions || null;
       const step = res?.data?.data?.step || null;
+      const trade = res?.data?.data?.trade || null;
 
       // Replace pending message with actual response
-      temp = messages.filter(m => m.id !== pendingId);
+      temp = [...temp].filter(m => m.id !== pendingId);
       temp.push({ 
         id: pendingId, 
         role: "ai", 
         content: aiReply, 
         pending: false,
         actions: actions,
-        step: step
+        step: step,
+        trade: trade
       });
       setMessages([...temp])
       
-      if (actions && actions.length > 0) {
+      // If trade is present, mark chat as complete
+      if (trade) {
+        setTradeComplete(true);
+        setCurrentActions(null);
+      } else if (actions && actions.length > 0) {
         setCurrentActions(actions);
         setCurrentStep(step);
       }
@@ -112,6 +119,19 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
       sendMessage("Hello")
     }
   },[isConnected])
+
+  function startNewChat() {
+    const userMessage = {id:Date.now().toString(), role:"user" as const, content:"Hello", pending:false};
+    const newMessages = [userMessage];
+    setMessages(newMessages);
+    setTradeComplete(false);
+    setCurrentActions(null);
+    setCurrentStep(null);
+    hasInitialized.current = false;
+    if(isConnected) {
+      sendMessage("Hello", newMessages);
+    }
+  }
 
 
   return (
@@ -186,42 +206,41 @@ const [messages, setMessages] = useState<ChatMessage[]>([{id:Date.now().toString
                   {action}
                 </button>
               ))
-            ) : (
-              quickPrompts.map((q) => (
-                <button
-                  key={q}
-                  onClick={() => sendUserMessage(q)}
-                  className="rounded-full glass px-3 py-1 text-[11px] text-muted-foreground transition hover:bg-white/10 hover:text-white"
-                >
-                  {q}
-                </button>
-              ))
-            )}
+            ) : null}
           </div>
 
           {/* Input */}
           <div className={`border-t border-white/10 p-3 ${currentActions ? "opacity-50 pointer-events-none" : ""}`}>
-            <div className="flex items-center gap-2 rounded-2xl glass p-2">
-              <button className="grid h-9 w-9 place-items-center rounded-xl hover:bg-white/10" aria-label="Voice input">
-                <Mic className="h-4 w-4 text-[color:var(--sakura)]" />
-              </button>
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder={currentActions ? "Select an option above..." : "Ask ChainPilot anything…"}
-                disabled={!!currentActions}
-                className="flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
-              />
+            {tradeComplete ? (
               <button
-                onClick={handleSend}
-                disabled={!!currentActions}
-                className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Send"
+                onClick={startNewChat}
+                className="w-full rounded-2xl bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-105 font-semibold py-3 px-4"
               >
-                <Send className="h-4 w-4" />
+                Start New Chat
               </button>
-            </div>
+            ) : (
+              <div className="flex items-center gap-2 rounded-2xl glass p-2">
+                <button className="grid h-9 w-9 place-items-center rounded-xl hover:bg-white/10" aria-label="Voice input">
+                  <Mic className="h-4 w-4 text-[color:var(--sakura)]" />
+                </button>
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  placeholder={currentActions ? "Select an option above..." : "Ask ChainPilot anything…"}
+                  disabled={!!currentActions}
+                  className="flex-1 bg-transparent px-1 py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed"
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={!!currentActions}
+                  className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-neon text-primary-foreground shadow-neon transition-transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  aria-label="Send"
+                >
+                  <Send className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </aside>
@@ -257,6 +276,28 @@ function Bubble({ msg }: { msg: ChatMessage }) {
         ) : (
           <>
             <p className="leading-relaxed">{msg.content}</p>
+            {isAI && msg.trade && (
+              <div className="mt-4 space-y-3 border-t border-white/10 pt-3">
+                <div className="font-semibold text-foreground">Trade Details</div>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">From:</span>
+                    <span className="font-semibold text-[color:var(--bullish)]">{msg.trade.tokenIn}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">To:</span>
+                    <span className="font-semibold text-[color:var(--bearish)]">{msg.trade.tokenOut}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Amount:</span>
+                    <span className="font-semibold text-foreground">{msg.trade.amountPercent}%</span>
+                  </div>
+                </div>
+                {/* <button className="w-full mt-3 rounded-lg bg-gradient-neon text-primary-foreground text-xs font-semibold py-2 transition-transform hover:scale-[1.03] shadow-neon">
+                  Execute Trade
+                </button> */}
+              </div>
+            )}
             {isAI && msg.actions && msg.actions.length > 0 && (
               <div className="mt-3 flex flex-col gap-2">
                 {msg.actions.map((action) => (
