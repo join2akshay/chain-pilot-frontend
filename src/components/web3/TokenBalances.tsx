@@ -77,7 +77,7 @@ console.log("Analysis data in TokenBalances:", analysisData)
       <ul className="mt-4 divide-y divide-white/5">
         {displayBalances.map((b: any) => (
           <li key={b.sym} className="flex items-center justify-between py-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-[2.5rem]">
               {b.logo ? (
                 <img src={b.logo} alt={b.sym} className="h-9 w-9 rounded-xl" />
               ) : (

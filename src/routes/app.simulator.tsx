@@ -11,19 +11,27 @@ export default function SimulatorPage() {
   const [risk, setRisk] = useState(55);
   const [horizon, setHorizon] = useState<(typeof horizons)[number]>("1y");
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+  const [simulationResult, setSimulationResult] = useState<any>(null);
+  const hasCalledInitial = useRef(false);
 
   const simulateAPI = async(cap: number, rsk: number, hrz: string) => {
     console.log("Simulating with - Capital:", cap, "Risk:", rsk, "Horizon:", hrz);
-    // TODO: Call actual API endpoint here
     try {
-    const res=await createApiClient().post("/portfolio/simulate",{"capital":cap,"riskTolerance ":rsk,"horizon":hrz})
-    console.log("simulate  data:",res)
-    
- 
-  } catch (error) {
-    console.error("Failed to fetch user data:", error);
-  }
+      const res = await createApiClient().post("/portfolio/simulate", {"capital": cap, "riskTolerance": rsk, "horizon": hrz});
+      console.log("simulate data:", res);
+      setSimulationResult(res?.data?.data);
+    } catch (error) {
+      console.error("Failed to fetch simulation data:", error);
+    }
   };
+
+  // Call API on component mount with default values
+  useEffect(() => {
+    if (!hasCalledInitial.current) {
+      hasCalledInitial.current = true;
+      simulateAPI(capital, risk, horizon);
+    }
+  }, []);
 
   useEffect(() => {
     // Clear previous timer
@@ -45,21 +53,38 @@ export default function SimulatorPage() {
   }, [capital, risk, horizon]);
 
   const { allocation, expectedReturn, drawdown } = useMemo(() => {
-    const eth = Math.round(20 + risk * 0.35);
-    const btc = Math.round(20 + (100 - risk) * 0.2);
-    const stables = Math.max(5, Math.round((100 - risk) * 0.45));
-    const alts = Math.max(0, Math.round(risk * 0.25));
-    const defi = Math.max(0, 100 - eth - btc - stables - alts);
-    const data = [
-      { name: "ETH", value: eth },
-      { name: "BTC", value: btc },
-      { name: "Stables", value: stables },
-      { name: "DeFi", value: defi },
-      { name: "Alts", value: alts },
-    ];
-    const horizonMult = { "3m": 0.25, "6m": 0.5, "1y": 1, "3y": 2.4 }[horizon];
-    return { allocation: data, expectedReturn: (8 + risk * 0.35) * horizonMult, drawdown: 6 + risk * 0.45 };
-  }, [risk, horizon]);
+    if (simulationResult?.allocation) {
+      // Use API response data
+      const allocationObj = simulationResult.allocation;
+      const data = Object.entries(allocationObj).map(([name, value]) => ({
+        name,
+        value: Number(value),
+      }));
+      const expectedReturnValue = simulationResult.projection?.expectedReturnPercent || 0;
+      const maxDrawdownValue = Math.abs(simulationResult.projection?.maxDrawdownPercent || 0);
+      return {
+        allocation: data,
+        expectedReturn: expectedReturnValue,
+        drawdown: maxDrawdownValue,
+      };
+    } else {
+      // Fallback to calculation if no API data
+      const eth = Math.round(20 + risk * 0.35);
+      const btc = Math.round(20 + (100 - risk) * 0.2);
+      const stables = Math.max(5, Math.round((100 - risk) * 0.45));
+      const alts = Math.max(0, Math.round(risk * 0.25));
+      const defi = Math.max(0, 100 - eth - btc - stables - alts);
+      const data = [
+        { name: "ETH", value: eth },
+        { name: "BTC", value: btc },
+        { name: "Stables", value: stables },
+        { name: "DeFi", value: defi },
+        { name: "Alts", value: alts },
+      ];
+      const horizonMult = { "3m": 0.25, "6m": 0.5, "1y": 1, "3y": 2.4 }[horizon];
+      return { allocation: data, expectedReturn: (8 + risk * 0.35) * horizonMult, drawdown: 6 + risk * 0.45 };
+    }
+  }, [simulationResult, risk, horizon]);
 
   return (
     <>
@@ -127,8 +152,12 @@ export default function SimulatorPage() {
           <div className="mt-4 space-y-4">
             <div className="glass rounded-xl p-4">
               <div className="flex items-center justify-between text-xs text-muted-foreground"><span>Expected Return ({horizon})</span><TrendingUp className="h-3.5 w-3.5 text-[color:var(--bullish)]" /></div>
-              <div className="mt-2 text-2xl font-semibold text-[color:var(--bullish)]">+{expectedReturn.toFixed(1)}%</div>
-              <div className="text-xs text-muted-foreground">≈ ${(capital * expectedReturn / 100).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+            <div className="mt-2 text-2xl font-semibold text-[color:var(--bullish)]">
+              +{expectedReturn.toFixed(1)}%
+            </div>
+            <div className="text-xs text-muted-foreground">
+              ≈ ${(capital * expectedReturn / 100).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            </div>
             </div>
             <div className="glass rounded-xl p-4">
               <div className="flex items-center justify-between text-xs text-muted-foreground"><span>Projected Max Drawdown</span><ShieldAlert className="h-3.5 w-3.5 text-[color:var(--bearish)]" /></div>
