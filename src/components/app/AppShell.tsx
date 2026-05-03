@@ -9,6 +9,7 @@ import {
   Activity,
   ChevronLeft,
   Menu,
+  Wand2,
 } from "lucide-react";
 import { useApp } from "./AppContext";
 import { CopilotPanel } from "./CopilotPanel";
@@ -22,8 +23,10 @@ import RecommendationsPage from "@/routes/app.recommendations";
 import SignalsPage from "@/routes/app.signals";
 import SimulatorPage from "@/routes/app.simulator";
 import FeedPage from "@/routes/app.feed";
+ import SwapAdvisorPage from "@/routes/app.swap-advisor";
 
-type NavItem = {
+type NavItem =
+ {
   to: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -37,6 +40,8 @@ const nav: NavItem[] = [
   { to: "/app/signals", label: "Onchain Signals", icon: Radio },
   { to: "/app/simulator", label: "Portfolio Simulator", icon: FlaskConical },
   { to: "/app/feed", label: "Transaction Feed", icon: Activity },
+  { to: "/app/swap-advisor", label: "AI Swap Advisor", icon: Wand2 },
+  
 ];
 
 export function AppShell() {
@@ -184,6 +189,7 @@ function ShellInner() {
               <Route path="/signals" element={<SignalsPage />} />
               <Route path="/simulator" element={<SimulatorPage />} />
               <Route path="/feed" element={<FeedPage />} />
+              <Route path="/swap-advisor" element={<SwapAdvisorPage />} />
             </Routes>
           </div>
         </main>
