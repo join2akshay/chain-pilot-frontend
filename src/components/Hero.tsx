@@ -5,6 +5,12 @@ import { SakuraPetals } from "./SakuraPetals";
 import sakuraTree from "@/assets/sakura-tree.png";
 import { useAppKit, useAppKitAccount } from '@/components/providers/Web3Provider'
 import { createApiClient } from "@/lib/apiClient";
+// import Logo from "@/assets/logo.png"
+import eth from "@/assets/eth.jpeg"
+import btc from "@/assets/btc.jpeg"
+import sol from "@/assets/sol.jpeg"
+
+
 const Ticker = ({ items }: { items: string[] }) => {
   return (
     <div className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm mt-[7rem]">
@@ -166,7 +172,8 @@ const [recommendationsData,setRecommendationsData]=useState<any>(null)
           <div className="glass-strong rounded-2xl p-4 shadow-card">
             <div className="flex items-center justify-between gap-4 text-sm">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-gradient-sakura" />
+                {/* <div className="h-8 w-8 rounded-lg bg-gradient-sakura" /> */}
+                <img src={recommendationsData?.token.toLowerCase()==='eth' ? eth : recommendationsData?.token.toLowerCase()==='btc' ? btc : sol} alt="ChainPilot Logo" className="h-8 w-8 rounded-lg " />
                 <div className="text-left">
                   <div className="font-medium">{recommendationsData?.token} · Recommendation</div>
                   <div className="text-xs text-muted-foreground">Confidence {recommendationsData?.confidence}% · RSI {recommendationsData?.rsi}</div>
